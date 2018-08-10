@@ -1,0 +1,39 @@
+{
+  "name": "appfolio-frontend-sample",
+  "version": "1.0.0",
+  "description": "Sample project for evaling front-end development techniques and skills.",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "lodash": "^4.17.10",
+    "prop-types": "^15.6.2",
+    "react": "^16.4.2",
+    "react-bootstrap": "^0.32.1",
+    "react-dom": "^16.4.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.5",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.16.5",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --mode development --open",
+    "build": "webpack --mode production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geoffreyhale/appfolio-frontend-sample.git"
+  },
+  "author": "Geoffrey Hale",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/geoffreyhale/appfolio-frontend-sample/issues"
+  },
+  "homepage": "https://github.com/geoffreyhale/appfolio-frontend-sample"
+}
