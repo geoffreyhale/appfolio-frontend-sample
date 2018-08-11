@@ -5,7 +5,7 @@ import UsersTable from './UsersTable';
 
 describe('UsersTable', () => {
     const component = renderer.create(
-        <UsersTable />
+        <UsersTable users={[{}]} />
     );
     const usersTable = component.toJSON();
 

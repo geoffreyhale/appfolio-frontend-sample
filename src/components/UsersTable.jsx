@@ -4,49 +4,98 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import UsersTableRow from './UsersTableRow';
+import SortableTableHeaderCell from './common/SortableTableHeaderCell';
 
-const UsersTable = props => {
-    const getTableHeadCell = (key, name) => {
-        // The table header should show which column is currently sorted by, and direction.
-        let sortIcon = <i className="fa fa-fw fa-sort"></i>;
-        if (props.sortKey == key) {
-            if (props.sortDir == 'asc') {
-                sortIcon = <i className="fa fa-fw fa-sort-up"></i>;
-            } else if (props.sortDir == 'desc') {
-                sortIcon = <i className="fa fa-fw fa-sort-down"></i>;
-            }
+class UsersTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            sortKey: null, // first, last, email
+            sortDir: null, // asc, desc
+        };
+    }
+
+    /**
+     * The table should be sortable by each column.
+     */
+    sortOnKey(sortKey, e) {
+        e.preventDefault();
+
+        /**
+         * Clicking on a new column will sort the new column ascending.
+         */
+        if (this.state.sortKey != sortKey) {
+            this.setState({
+                sortKey: sortKey,
+                sortDir: 'asc'
+            })
         }
+        /**
+         * Clicking on the currently sorted column will reverse the sort direction.
+         */
+        else {
+            this.setState({
+                sortDir: this.state.sortDir === 'asc' ? 'desc' : 'asc'
+            });
+        }
+    }
 
+    getSortedUsers() {
+        return _.orderBy(this.props.users, [this.state.sortKey], [this.state.sortDir]);
+    }
+
+    getUsersForPage() {
+        const users = this.getSortedUsers();
+
+        return users.slice(
+            (this.props.page - 1) * this.props.usersPerPage,
+            this.props.page * this.props.usersPerPage
+        );
+    }
+
+    /**
+     * Display the user's first name, last name, and email address in each column.
+     */
+    render() {
         return (
-            <th onClick={(e) => props.sortOnKey(key, e)}>
-                {name}
-                {sortIcon}
-            </th>
-        )
-    };
-
-    // Display the user's first name, last name, and email address in each column.
-    return (
-        <Table striped bordered condensed hover>
-            <thead>
-            <tr>
-                {getTableHeadCell('first', 'First')}
-                {getTableHeadCell('last', 'Last')}
-                {getTableHeadCell('email', 'Email')}
-            </tr>
-            </thead>
-            <tbody>
-            <Rows users={props.users}/>
-            </tbody>
-        </Table>
-    );
-};
+            <Table striped bordered condensed hover>
+                <thead>
+                <tr>
+                    <SortableTableHeaderCell
+                        currentSortDir={this.state.sortDir}
+                        currentSortKey={this.state.sortKey}
+                        sortKey={'first'}
+                        sortOnKey={this.sortOnKey.bind(this)}
+                        text={'First'}
+                    />
+                    <SortableTableHeaderCell
+                        currentSortDir={this.state.sortDir}
+                        currentSortKey={this.state.sortKey}
+                        sortKey={'last'}
+                        sortOnKey={this.sortOnKey.bind(this)}
+                        text={'Last'}
+                    />
+                    <SortableTableHeaderCell
+                        currentSortDir={this.state.sortDir}
+                        currentSortKey={this.state.sortKey}
+                        sortKey={'email'}
+                        sortOnKey={this.sortOnKey.bind(this)}
+                        text={'Email'}
+                    />
+                </tr>
+                </thead>
+                <tbody>
+                <Rows users={this.getUsersForPage()}/>
+                </tbody>
+            </Table>
+        );
+    }
+}
 
 UsersTable.propTypes = {
-    sortDir: PropTypes.string, // asc, desc
-    sortKey: PropTypes.string,
-    sortOnKey: PropTypes.func,
-    users: PropTypes.arrayOf(PropTypes.object),
+    page: PropTypes.number,
+    users: PropTypes.arrayOf(PropTypes.object).isRequired,
+    usersPerPage: PropTypes.number,
 };
 
 const Rows = props => (

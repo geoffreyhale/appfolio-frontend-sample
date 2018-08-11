@@ -3,6 +3,9 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+/**
+ * If there is no previous or next page, the links should be hidden or disabled.
+ */
 const PaginationSelector = props => {
     const getPageMax = () => {
         return (props.itemCount / props.itemsPerPage);
@@ -41,7 +44,6 @@ const PaginationSelector = props => {
     }
 
     const getFirstPaginationSelector = () => {
-        // If there is no previous or next page, the links should be hidden or disabled.
         if (props.page <= 1) {
             return null;
         }
@@ -52,7 +54,6 @@ const PaginationSelector = props => {
     };
 
     const getPreviousPaginationSelector = () => {
-        // If there is no previous or next page, the links should be hidden or disabled.
         if (props.page <= 1) {
             return null;
         }
@@ -77,7 +78,6 @@ const PaginationSelector = props => {
     };
 
     const getNextPaginationSelector = () => {
-        // If there is no previous or next page, the links should be hidden or disabled.
         if (props.page == getPageMax()) {
             return null;
         }
@@ -88,7 +88,6 @@ const PaginationSelector = props => {
     };
 
     const getLastPaginationSelector = () => {
-        // If there is no previous or next page, the links should be hidden or disabled.
         if (props.page == getPageMax()) {
             return null;
         }
