@@ -1,9 +1,9 @@
-import {Button} from "react-bootstrap";
-import _ from "lodash";
+import {Button} from 'react-bootstrap';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
-import React from "react";
+import React from 'react';
 
-const PageSelector = props => {
+const PaginationSelector = props => {
     const getPageMax = () => {
         return (props.itemCount / props.itemsPerPage);
     };
@@ -40,7 +40,7 @@ const PageSelector = props => {
         }
     }
 
-    const getFirstPageSelector = () => {
+    const getFirstPaginationSelector = () => {
         // If there is no previous or next page, the links should be hidden or disabled.
         if (props.page <= 1) {
             return null;
@@ -51,7 +51,8 @@ const PageSelector = props => {
         );
     };
 
-    const getPreviousPageSelector = () => {
+    const getPreviousPaginationSelector = () => {
+        // If there is no previous or next page, the links should be hidden or disabled.
         if (props.page <= 1) {
             return null;
         }
@@ -75,7 +76,8 @@ const PageSelector = props => {
         )
     };
 
-    const getNextPageSelector = () => {
+    const getNextPaginationSelector = () => {
+        // If there is no previous or next page, the links should be hidden or disabled.
         if (props.page == getPageMax()) {
             return null;
         }
@@ -85,7 +87,8 @@ const PageSelector = props => {
         )
     };
 
-    const getLastPageSelector = () => {
+    const getLastPaginationSelector = () => {
+        // If there is no previous or next page, the links should be hidden or disabled.
         if (props.page == getPageMax()) {
             return null;
         }
@@ -96,22 +99,21 @@ const PageSelector = props => {
     };
 
     return (
-        // There should be controls below the table to go to next page, previous page, etc
         <div className={props.className}>
-            {getFirstPageSelector()}
-            {getPreviousPageSelector()}
+            {getFirstPaginationSelector()}
+            {getPreviousPaginationSelector()}
             {getPageNumberSelectors()}
-            {getNextPageSelector()}
-            {getLastPageSelector()}
+            {getNextPaginationSelector()}
+            {getLastPaginationSelector()}
         </div>
     );
 };
 
-PageSelector.propTypes = {
+PaginationSelector.propTypes = {
     itemCount: PropTypes.number,
     itemsPerPage: PropTypes.number,
     page: PropTypes.number,
     setPage: PropTypes.func,
 };
 
-export default PageSelector;
+export default PaginationSelector;

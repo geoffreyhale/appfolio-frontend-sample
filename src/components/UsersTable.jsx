@@ -1,9 +1,9 @@
-import {Table} from "react-bootstrap";
-import _ from "lodash";
+import {Table} from 'react-bootstrap';
+import _ from 'lodash';
 import PropTypes from 'prop-types';
-import React from "react";
+import React from 'react';
 
-import UsersTableRow from './UsersTableRow.jsx';
+import UsersTableRow from './UsersTableRow';
 
 const UsersTable = props => {
     const getTableHeadCell = (key, name) => {

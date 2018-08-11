@@ -1,18 +1,19 @@
-import axios from "axios";
-import React from "react";
+import axios from 'axios';
+import React from 'react';
 
-import PageSelector from './PageSelector.jsx';
-import UsersTable from './UsersTable.jsx';
+import PaginationSelector from './common/PaginationSelector';
+import PaginationDisplaying from './common/PaginationDisplaying';
+import UsersTable from './UsersTable';
 
 class UsersPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             page: 1,
-            sort_key: null, //first, last, email
-            sort_dir: null, // asc, desc
+            sortKey: null, //first, last, email
+            sortDir: null, // asc, desc
             users: [],
-            users_per_page: 10, // The table should show only 10 users at a time.
+            usersPerPage: 10, // The table should show only 10 users at a time.
         };
     }
 
@@ -37,62 +38,59 @@ class UsersPage extends React.Component {
     }
 
     getSortedUsers() {
-        return _.orderBy(this.state.users, [this.state.sort_key], [this.state.sort_dir]);
+        return _.orderBy(this.state.users, [this.state.sortKey], [this.state.sortDir]);
     }
 
     getUsersForPage() {
         const users = this.getSortedUsers();
 
         return users.slice(
-            (this.state.page - 1) * this.state.users_per_page,
-            this.state.page * this.state.users_per_page
-        );
-    }
-
-    // There should be a page indicator below the table showing which users are visible
-    getPageDetails() {
-        const lowIndex = (this.state.page - 1) * this.state.users_per_page + 1;
-        const highIndex = Math.min((this.state.page) * this.state.users_per_page, this.state.users.length);
-
-        return (
-            <span>Displaying: {lowIndex}-{highIndex} of {this.state.users.length}</span>
+            (this.state.page - 1) * this.state.usersPerPage,
+            this.state.page * this.state.usersPerPage
         );
     }
 
     // The table should be sortable by each column.
-    sortOnKey(sort_key, e) {
+    sortOnKey(sortKey, e) {
         e.preventDefault();
 
-        if (this.state.sort_key != sort_key) {
+        if (this.state.sortKey != sortKey) {
             // Clicking on a new column will sort the new column ascending.
             this.setState({
-                sort_key: sort_key,
-                sort_dir: 'asc'
+                sortKey: sortKey,
+                sortDir: 'asc'
             })
         } else {
             // Clicking on the currently sorted column will reverse the sort direction.
             this.setState({
-                sort_dir: this.state.sort_dir === 'asc' ? 'desc' : 'asc'
+                sortDir: this.state.sortDir === 'asc' ? 'desc' : 'asc'
             });
         }
     }
 
+    // There should be a page indicator below the table showing which users are visible
+    // There should be controls below the table to go to next page, previous page, etc
+    // If there is no previous or next page, the links should be hidden or disabled.
     render() {
         return (
             <div>
                 <h1>Users ({this.state.users.length})</h1>
                 <UsersTable
-                    sortDir={this.state.sort_dir}
-                    sortKey={this.state.sort_key}
+                    sortDir={this.state.sortDir}
+                    sortKey={this.state.sortKey}
                     sortOnKey={this.sortOnKey.bind(this)}
                     users={this.getUsersForPage()}
                 />
                 <div>
-                    {this.getPageDetails()}
-                    <PageSelector
+                    <PaginationDisplaying
+                        itemsPerPage={this.state.usersPerPage}
+                        itemsTotal={this.state.users.length}
+                        page={this.state.page}
+                    />
+                    <PaginationSelector
                         className="pull-right"
                         itemCount={this.state.users.length}
-                        itemsPerPage={this.state.users_per_page}
+                        itemsPerPage={this.state.usersPerPage}
                         page={this.state.page}
                         setPage={(page) => { this.setState({ page: page })}}
                     />
